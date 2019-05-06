@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+
+
+
+{% block content %}
+{% load static %}
+
+<head>
+    <script src="{% static 'script.js' %}" defer></script>
+</head>
+
+<style>
+    .main {
+        position: relative;
+        left: 30%;
+        top: 37em;
+        margin: 5px auto;
+        width: 30%;
+
+
+    }
+
+    .clockbox,
+    #clock {
+        width: 100%;
+    }
+  
+    .circle {
+        fill: none;
+        stroke: #000;
+        stroke-width: 9;
+        stroke-miterlimit: 10;
+    }
+
+    .mid-circle {
+        fill: #000;
+    }
+
+    .hour-marks {
+        fill: none;
+        stroke: #000;
+        stroke-width: 9;
+        stroke-miterlimit: 10;
+    }
+
+    .hour-arm {
+        fill: none;
+        stroke: #000;
+        stroke-width: 17;
+        stroke-miterlimit: 10;
+    }
+
+    .minute-arm {
+        fill: none;
+        stroke: #000;
+        stroke-width: 11;
+        stroke-miterlimit: 10;
+    }
+
+    .second-arm {
+        fill: none;
+        stroke: #000;
+        stroke-width: 4;
+        stroke-miterlimit: 10;
+    }
+
+    .sizing-box {
+        fill: none;
+    }
+
+    #hour,
+    #minute,
+    #second {
+        transform-origin: 300px 300px;
+        transition: transform .5s ease-in-out;
+    }
+
+    .container {
+
+        position: relative;
+        width: 70%;
+
+    }
+
+    .img-fluid {
+        height: 40vh;
+        box-shadow: 5px 5px lightgray;
+        border-radius: 10px;
+        min-width: 100%;
+        min-height: 60vh;
+    }
+
+    .fb-comments {
+        position: relative;
+        left: 5%;
+    }
+
+    #photo {
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+    }
+    .text-center{
+        position: absolute;
+               
+    }
+    #coffeshop_name{
+        position: relative;
+    }
+</style>
+
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
+<div class="container">
+    <h1 class="text-center pt-5">Mrki's selected non smoking coffee shops</h1>
+</div>
+<br>
+<br>
+
+<div class="container">
+    <div class="main">
+        <div class="clockbox">
+            <svg id="clock" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 600 600">
+                <g id="face">
+                    <circle class="circle" cx="300" cy="300" r="253.9" />
+                    <path class="hour-marks"
+                        d="M300.5 94V61M506 300.5h32M300.5 506v33M94 300.5H60M411.3 107.8l7.9-13.8M493 190.2l13-7.4M492.1 411.4l16.5 9.5M411 492.3l8.9 15.3M189 492.3l-9.2 15.9M107.7 411L93 419.5M107.5 189.3l-17.1-9.9M188.1 108.2l-9-15.6" />
+                    <circle class="mid-circle" cx="300" cy="300" r="16.2" />
+                </g>
+                <g id="hour">
+                    <path class="hour-arm" d="M300.5 298V142" />
+                    <circle class="sizing-box" cx="300" cy="300" r="253.9" />
+                </g>
+                <g id="minute">
+                    <path class="minute-arm" d="M300.5 298V67" />
+                    <circle class="sizing-box" cx="300" cy="300" r="253.9" />
+                </g>
+                <g id="second">
+                    <path class="second-arm" d="M300.5 350V55" />
+                    <circle class="sizing-box" cx="300" cy="300" r="253.9" />
+                </g>
+            </svg>
+        </div><!-- .clockbox -->
+    </div>
+    <h1 id="coffeshop_name" class="text-center pt-5">{{object.name}}</h1>
+    <br>
+    <div><strong>Added by : </strong> <img id="photo" src="{{ object.user.profile.photo.url }}"
+            alt="user profile photo">
+        {{ object.user }} <strong> on </strong> {{ object.date_pretty }}
+    </div>
+    <a href="{% url 'all_user_coffeeshops' object.user %}" class="btn btn-secondary">View all {{ object.user }}'s
+        posts.</a>
+    <br>
+    <br>
+    <br>
+    {% if user.is_authenticated %}
+
+    <a href="javascript:{document.getElementById('upvote').submit()}"><button
+            class="btn btn-primary btn-sm mt-1 mb-1">Upvote {{ object.votes }}</button></a>
+
+    <form id="upvote" action="{% url 'upvote' object.id user.username %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden">
+    </form>
+    {% else %}
+
+    <a href="{% url 'signin' %}"><button class="btn btn-primary btn-sm mt-1 mb-1">Sign in to vote</button></a>
+
+    {% endif %}
+    <br>
+    <br>
+    <br>
+
+    {% if object.user == user %}
+    <div>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'coffeshop_update' object.id %}">Update</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'coffeshop_delete' object.id %}">Delete</a>
+    </div>
+
+    {% endif %}
+    <p><strong>Address :</strong> {{ object.address }}</p>
+
+    <p> <strong>Smoking allowed :</strong> {{ object.smoking }}</p>
+    <br>
+    <p> <strong>Weekday working hours :</strong> {{ object.working_hours_weekdays }}</p>
+    <p> <strong>Saturday working hours :</strong> {{ object.working_hours_saturday }}</p>
+    <p> <strong>Sunday working hours :</strong> {{ object.working_hours_sunday }}</p>
+    <br>
+    <img id="img" class="img-fluid" src="{{ object.image1.url }}">
+    <br>
+    <br>
+    <br>
+    <p>{{ object.description }}</p>
+    {% if  object.image2 %}
+    <img id="img" class="img-fluid" src="{{ object.image2.url }}">
+    {% endif %}
+    <br>
+    <br>
+    <br>
+    {% if object.description2 %}
+    <p>
+        {{ object.description2 }}
+    </p>
+    <br>
+    <br>
+    <br>
+    {% endif %}
+    {% if object.image3 %}
+    <img id="img" class="img-fluid" src="{{ object.image3.url }}">
+    {% endif %}
+    <br>
+    <br>
+    <br>
+    {% if object.description3 %}
+    <p>
+        {{ object.description3 }}
+    </p>
+    <br>
+    <br>
+    <br>
+    {% endif %}
+    <div class="fb-comments" data-href="{{ request.build_absolute_uri }}{{ object.get_absolute_url }}"
+        data-numposts="5"></div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  {% comment %}   {% load addthis %} {% endcomment %}
+
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5c8bb2f6a5c7e509"></script>
+    {% comment %} {% addthis_widget %} {% endcomment %}
+</div>
+
+{% endblock content %}

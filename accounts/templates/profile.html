@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    #photo {
+        border-radius: 50%;
+        height: 10%;
+        width: 10%;
+    }
+
+    #div_info {
+        position: relative;
+        height: 80%;
+        width: 80%;
+        right: 20%;
+        left: 20%;
+        top: 40px;
+    }
+
+    #div_username {
+        position: absolute;
+        left: 12%;
+        bottom: 15%;
+    }
+
+    #div_form {
+        position: relative;
+        left: 20%;
+        top: 25%;
+        height: 80%;
+        width: 50%;
+    }
+
+    #message {
+        position: relative;
+        top: 30px;
+        left: 30%;
+        font-size: 150%;
+    }
+</style>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div id="message" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+<div id="div_info">
+    <br>
+    <img id="photo" src="{{ user.profile.photo.url }}" alt="user profile photo">
+    <br>
+    <div id="div_username">
+        <strong>User : </strong>{{ user.username }}
+        <br>
+        <strong>Email :</strong> {{ user.email }}
+        <br>
+        <strong>Joined : </strong> {{ user.profile.date|date:"M d Y" }}
+    </div>
+</div>
+<br>
+<br>
+<div id="div_form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom-mb-4"> Profile info</legend>
+            {{ u_form|crispy }}
+            {{ p_form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Update </button>
+        </div>
+        <!-- <div id="div">
+            {{ form|crispy }}
+            <br>
+            <input type="submit" class="btn btn-primary" value="Sign up!">
+        </div>-->
+    </form>
+</div>
+{% endblock content %}

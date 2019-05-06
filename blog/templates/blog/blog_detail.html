@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+
+
+
+{% block content %}
+
+
+<style>
+    .container {
+        width: 70%;
+    }
+
+    .img-fluid {
+        height: 40vh;
+        box-shadow: 5px 5px lightgray;
+        border-radius: 10px;
+        min-width: 100%;
+        min-height: 60vh;
+
+
+    }
+
+   
+</style>
+
+
+<div class="container">
+    <h1 class="text-center pt-5">{{object.title}}</h1>
+    <p class="text-center">{{ object.pub_date_pretty }}</p>
+
+    <br>
+    <img id="img" class="img-fluid" src="{{ object.image.url }}">
+    <br>
+
+    <p>{{ object.text }}</p>
+    <br>
+    {% if  object.image2 %}
+    <img id="img" class="img-fluid" src="{{ object.image2.url }}">
+    {% endif %}
+    <br>
+
+    <br>
+    {% if object.text2 %}
+    <p>
+        {{ object.text2 }}
+    </p>
+    <br>
+
+    <br>
+    {% endif %}
+    {% if object.image3 %}
+    <img id="img" class="img-fluid" src="{{ object.image3.url }}">
+    {% endif %}
+    <br>
+
+    <br>
+    {% if object.text3 %}
+    <p>
+        {{ object.text3 }}
+    </p>
+    <br>
+
+
+    {% endif %}
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=
+    AIzaSyBEw-Tji9HGD6onYUnHYnVOJBCgOXmMLLo
+    &callback=myMap"></script>
+
+    <div class="fb-comments" data-href="{{ request.build_absolute_uri }}{{ object.get_absolute_url }}"
+        data-numposts="5"></div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+   {% comment %}  {% load addthis %} {% endcomment %}
+
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5c8bb2f6a5c7e509"></script>
+   {% comment %}  {% addthis_widget %} {% endcomment %}
+</div>
+
+
+{% endblock content %}

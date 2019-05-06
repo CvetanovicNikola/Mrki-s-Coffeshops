@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <script src="script.js" defer></script>
+</head>
+
+<style>
+
+    .container {
+        width: 70%;
+    }
+
+    #summary {
+        width: 80%;
+    }
+
+    #img {
+        height: 20vh;
+        width: 80%;
+        box-shadow: 5px 5px lightgray;
+        border-radius: 10px;
+        height : 400px;
+
+    }
+
+    #id {
+        position: absolute;
+        left: 70%;
+    }
+    #photo {
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+    }
+      #form {
+        position: relative;
+        top : 30px;
+        left: 3%;
+    }
+    
+</style>
+
+
+<div id="all">
+    <div id="form">
+    <form action="{% url 'coffeeshops' %}" method="GET">
+        <input type="text" placeholder="Search coffeshops" name="name" value="{{ request.GET.name }}">
+        <br>
+        <br>
+        <input class="btn btn-primary" type="submit" value="search">
+        
+    </form>
+</div>
+    <div class="container">
+        <h1 class="text-center pt-5">Mrki's selected non smoking coffee shops</h1>
+        <br>
+        <br>
+        
+        
+        {% for coffeeshop in coffeeshops.all %}
+            <a href="{% url 'coffeshop_detail' coffeeshop.id %}"> 
+            <h3>{{ coffeeshop.name }}</h3>
+
+            <div><strong>Added by : </strong> <img id="photo" src="{{ coffeeshop.user.profile.photo.url }}" alt="user profile photo">
+                {{ coffeeshop.user }}  <strong> on </strong> {{ coffeeshop.date_pretty }}
+            </div> 
+            <a href="{% url 'all_user_coffeeshops' coffeeshop.user %}" class="btn btn-secondary">View all {{ coffeeshop.user }}'s posts.</a>
+            <br>
+            <br>
+            <br>
+            Votes : {{ coffeeshop.votes }}
+            <br>
+            {{ coffeeshop.address }}
+            {{ blog.pub_date_pretty }}
+            <br>
+            <img id="img" class="img-fluid" src="{{ coffeeshop.image1.url }}">
+            <br>
+            <p id="summary">{{ coffeeshop.description }}</p>
+            <br>
+            <br>
+            <br>
+            {% endfor %}
+    </div>
+    
+</div>
+
+
+<div class="container">
+
+{% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+
+        {% if page_obj.number == num %}
+            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+
+    {% endif %}
+
+{% endif %}
+
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}

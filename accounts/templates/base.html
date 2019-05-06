@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Mrki's coffe shop reviews</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+         crossorigin="anonymous" />
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {}
+        }
+
+        #bottom,
+        #container {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #fb {
+            position: absolute;
+            left: 80%;
+            top: 30%;
+            width: 10%;
+        }
+
+        #hello {
+            color: antiquewhite;
+
+        }
+        .main{
+            position : absolute;
+            top : 50px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="fb-root"></div>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <img src="/media/images/letter-m.png" alt="Mrki's logo">
+            <a class="navbar-brand" href="{% url 'home' %}">Mrki's coffee shop reviews</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+
+                    <a id="hello" class="navbar-brand">Hello {{ user.username }}! </a>
+                    <a class="nav-item nav-link" href="{% url 'post_create' %}">Add Coffeeshop </a>
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile </a>
+                    <a class="nav-item nav-link" href="{% url 'home' %}">Home </a>
+                    <a class="nav-item nav-link" href="{% url 'coffeeshops' %}">Coffeeshops</a>
+                    <a class="nav-item nav-link" href="javascript:{document.getElementById('logout').submit()}"
+                        onclick="">Log out
+                    </a>
+                    <form id="logout" method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <input type="hidden">
+
+                    </form>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{% url 'home' %}">Home </a>
+                    <a class="nav-item nav-link" href="{% url 'coffeeshops' %}">Coffeeshops</a>
+                    <a class="nav-item nav-link" href="{% url 'signin' %}">Create account</a>
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Log in</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main" role="main">
+
+
+
+        <div id="fb" class="fb-page" data-href="https://www.facebook.com/facebook" data-tabs="timeline" data-width="200"
+            data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false"
+            data-show-facepile="true">
+            <blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore"><a
+                    href="https://www.facebook.com/facebook">Facebook</a></blockquote>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tag }}">
+                    {{ message }}
+                </div>               
+            {% endfor %}
+            
+        {% endif %}
+        {% block content %}
+
+        {% endblock content %}
+
+
+        <div class="album py-5 bg-light" id="container">
+            <div class="container">
+
+                <div class="row">
+
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-muted" id="bottom">
+        <div class="container text-center">
+            <p class="float-right">
+                <a href="#">Back to top</a>
+            </p>
+            <p> &copy; Nikola Cvetanovic {% now "Y" %}</p>
+        </div>
+        <div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from
+            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+                href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC
+                3.0 BY</a></div>
+
+    </footer>
+    <script src="{% static 'bootstrap/js/jquery-3.3.1.slim.min.js' %}"
+        crossorigin="anonymous"></script>
+    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script> {% endcomment %}
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"
+        
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

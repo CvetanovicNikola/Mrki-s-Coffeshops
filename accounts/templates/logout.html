@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    h1 {
+        position: absolute;
+        left: 10%;
+        top: 15%;
+    }
+
+    #login {
+        position: absolute;
+        left: 10%;
+        top: 20%;
+        padding-top: 7%;
+    }
+</style>
+<h1>You have logged out.</h1>
+
+<div id="login">
+    <h3>Log in</h3>
+
+    <a href="{% url 'login' %}" class="btn btn-primary">Log in.</a>
+</div>
+
+{% endblock content %}

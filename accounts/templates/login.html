@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    #div {
+        position: relative;
+        left: 10%;
+        top: 10%;
+        width: 50%;
+    }
+
+    #create_account {
+        position: relative;
+        left: 10%;
+        top: 6%;
+    }
+
+    #need_account {
+        position: relative;
+        left: 10%;
+        top: 25%;
+        padding-top: 7%;
+    }
+
+    #message {
+        position: relative;
+        top: 20px;
+        right: 20%;
+        left: 30%;
+        font-size: 150%;
+    }
+</style>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div id="message" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1 id="create_account">Log in</h1>
+<br>
+<form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div id="div">
+        {{ form|crispy }}
+        <br>
+        <input type="submit" class="btn btn-primary" value="Log in">
+        <small class="text-muted ml-2" >
+            <a href="{% url 'password_reset' %}">Forgot your password?</a> 
+
+        </small>
+    </div>
+</form>
+<br>
+<br>
+<div id="need_account">
+    <h3>Need an account?</h3>
+
+    <a href="{% url 'signin' %}" class="btn btn-primary">Create an account.</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .container {
+        width: 70%;
+    }
+
+    #summary {
+        width: 80%;
+
+    }
+
+    #img {
+
+        height: 400px;
+        width: 80%;
+        box-shadow: 5px 5px lightgray;
+        border-radius: 10px;
+
+
+    }
+
+    #id {
+        position: absolute;
+        left: 70%;
+    }
+
+    #form {
+        position: relative;
+        top : 30px;
+        left: 3%;
+    }
+</style>
+
+<div id="form">
+    <form action="{% url 'allblogs' %}" method="GET">
+        <input type="text" placeholder="Search blog posts" name="title" value="{{ request.GET.title }}">
+        <br>
+        <br>
+        <input class="btn btn-primary" type="submit" value="search">
+    </form>
+</div>
+<div id="all">
+    
+
+    <div class="container">
+        <h1 class="text-center pt-5">Mrki's coffe shop reviews</h1>
+        <br>
+        <br>
+        <h2>Latest Post</h2>
+        <hr>
+
+        {% for blog in blogs.all %}
+        <a href="{% url 'detail' blog.id %}">
+            <h3>{{ blog.title }}</h3>
+
+            {{ blog.pub_date_pretty }}
+            <br>
+            <img id="img" class="img-fluid" src="{{ blog.image.url }}">
+            <br>
+            <p id="summary">{{ blog.summary }}</p>
+            {% endfor %}
+
+    </div>
+</div>
+<div class="container">
+
+    {% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+
+    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+
+    {% if page_obj.number == num %}
+    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+
+    <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+
+    {% endif %}
+
+    {% endif %}
+
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}
